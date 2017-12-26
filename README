@@ -1,0 +1,59 @@
+#LIT_APP
+
+------------------------------------------------------------------
+- Installations
+------------------------------------------------------------------
+1. mysql (version >= 14.14)
+2. nodejs (version >= 9.2.1)
+3. phpmyadmin
+
+
+------------------------------------------------------------------
+- Deployment
+------------------------------------------------------------------
+
+(I). Import database
+	- login to localhost/phpmyadmin using credentials made during installations
+	- click on import and browse and choose the file DDL.sql
+	- verify that a new database has been created with 7 tables:
+		- options
+		- question
+		- student
+		- subject
+		- submission
+		- teacher
+		- topic
+
+(II). Change config settings
+	- open app/config/config.json
+	- update username, password and database name accordingly
+
+(III). Run the node server
+	- open terminal in the current folder
+	- run the following command on terminal:
+		- node index.js
+		- If the following appears on console, you have successfully deployed the project:
+			Site is live
+			Executing (default): SELECT 1+1 AS result
+			Nice! Database looks fine"
+
+------------------------------------------------------------------
+- Updations in the database
+------------------------------------------------------------------
+
+To insert topics:
+1. login to localhost/phpmyadmin
+2. open the table 'topic' in the database 
+3. click on insert on the menu bar (towards the top of the phpmyadmin window)
+4. type in the name of the topic and select the corresponding subject
+5. click on go 
+
+
+To insert questions and options in the database: 
+1. open localhost:5000/insertQuestion in any browser
+2. type in the questions, their topics, marks and subject
+3. type in the options, check the checkbox if the option is correct
+4. click on submit to insert the question. On the console, a message "SUCCESS!" appears on successful insertion of the question
+(5. verify that there are records in the tables 'question' as well as 'options' the first few times you make a submission.)
+
+
