@@ -57,6 +57,9 @@ models.sequelize.sync().then(function(){
 var insertQuestionRoute = require('./app/routes/insertQuestion');
 app.use(insertQuestionRoute);
 
+//Display all questions portal
+var displayAllQuestions = require('./app/routes/displayAllQuestions');
+app.use(displayAllQuestions);
 
 app.listen(5000, function(err){
 	if(!err)

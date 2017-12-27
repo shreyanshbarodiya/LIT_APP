@@ -10,22 +10,18 @@ router.get('/insertQuestion', function(req, res){
       _subjects.forEach(function(subject){
         subjects.push(subject.get());
       });
-    }).catch(function (err) {
-      console.log('Cannot fetch subjects');
-      res.send(err);
-    });
-
-    models.topic.findAll().then(function (_topics) {
-      _topics.forEach(function(topic){
-        topics.push(topic.get());
+    }).then(function(){
+      models.topic.findAll().then(function (_topics) {
+        _topics.forEach(function(topic){
+          topics.push(topic.get());
+        });
       });
-    }).catch(function (err) {
-      console.log('Cannot fetch topics');
-      res.send(err);
+    }).then(function(){
+      
+      res.render('insertQuestion', {subject_list: subjects, topic_list: topics});
     });
 
 
-    res.render('insertQuestion', {subject_list: subjects, topic_list: topics});
 });
 
 router.post('/insertQuestion', function(req, res){
