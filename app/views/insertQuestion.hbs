@@ -4,10 +4,8 @@
 	<title></title>
 </head>
 <body>
-<form id="insertQuestion" name="insertQuestion" method="post" action="insertQuestion">
-<!-- {{subject_list}}
-{{topic_list}}
-<hr/> -->
+<form id="insertQuestion" name="insertQuestion" method="post" action="insertQuestion" enctype="multipart/form-data">
+
 
   Question: <br/>
   <textarea name="question_text" rows="4" cols="50"></textarea>
@@ -35,26 +33,35 @@
   <label for="question_marks">Question Marks: </label>
   <input name="question_marks" type="text"/>
   <br/>
+
+  <div>
+      <input type="file" name="uploaded_image" accept=""/>
+  </div>
+
+
   <br/>
+
+
 
   Options:
   <br/> 
   <label>1 : </label>
-  <input name="options[]" type="text"/>
-  <input name="correct[]" type="checkbox" value="1"/>
+  <input name="options" type="text"/>
+  <input name="correct" type="checkbox" value="1"/>
   <br/>
   <label>2 : </label>
-  <input name="options[]" type="text"/>
-  <input name="correct[]" type="checkbox" value="2"/>
+  <input name="options" type="text"/>
+  <input name="correct" type="checkbox" value="2"/>
   <br/>
   <label>3 : </label>
-  <input name="options[]" type="text"/>
-  <input name="correct[]" type="checkbox" value="3"/>
+  <input name="options" type="text"/>
+  <input name="correct" type="checkbox" value="3"/>
   <br/>
   <label>4 : </label>
-  <input name="options[]" type="text"/>
-  <input name="correct[]" type="checkbox" value="4"/>
+  <input name="options" type="text"/>
+  <input name="correct" type="checkbox" value="4"/>
   <br/>
+
 
   
   <input class="btn" type="submit" value="Insert" />

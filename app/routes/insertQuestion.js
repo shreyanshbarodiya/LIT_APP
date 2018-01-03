@@ -25,8 +25,15 @@ router.get('/insertQuestion', function(req, res){
 });
 
 router.post('/insertQuestion', function(req, res){
+    
+    console.log('files: ' + req.files);
+    console.log('req: ' + JSON.stringify(req.body));
+    
     var corrects = req.body.correct;
-    console.log(corrects);
+    console.log('corrects: ' + corrects);
+    console.log('options: ' + req.body.options);
+
+
     var data =
       {   question_text: req.body.question_text,
           topic_name: req.body.topic_name,
@@ -36,48 +43,117 @@ router.post('/insertQuestion', function(req, res){
           image_url: ""
       };
 
-    var question_id;
-    models.question.create(data).then(function(newquestion,created){
-      if(!newquestion){
-        console.log('\n \n FAILED!!! \n \n ');
-        console.log(data);
-      }
-      if(newquestion){
-        console.log('\n \n SUCCESS!!! \n \n ');
-        question_id = newquestion.get().question_id;
-      }
-    }).then(function(){
-        var results=[];
-        var options = req.body.options;
-        var corrects = req.body.correct;
+    if(req.files.uploaded_image){
+      var file = req.files.uploaded_image;
+      var img_name=file.name;
+      
+      if(file.mimetype == "image/jpeg" ||file.mimetype == "image/png"||file.mimetype == "image/gif" ){               
+            file.mv('public/images/'+file.name, function(err) {     
+              if (err){
+                console.log('ERROR in images: ' + err);
+                return res.status(500).send(err);
+              }
 
-        for (var i = 0; i < options.length; i++) {
-            var _corr=0;
-            if(corrects.includes((i+1).toString())){
-              _corr=1;
-            }
-            var result={
-              option_id : i+1,
-              question_id : question_id,
-              option_text : options[i],
-              is_correct : _corr,
-              contains_image : 0,
-              image_url : ""
-            };
-            results.push(result);
-        }
 
-         models.options.bulkCreate(results, {fields: ['option_id', 'question_id',
-            'option_text', 'is_correct', 'contains_image', 'image_url']}).then(function(response){
-              // console.log(response);
-            }).catch(function(error){
-              // console.log(error);
+            });
+            data.contains_image=1;
+            data.image_url= img_name;
+            var question_id;
+            models.question.create(data).then(function(newquestion,created){
+              if(!newquestion){
+                console.log('\n \n FAILED!!! \n \n ');
+                console.log(data);
+              }
+              if(newquestion){
+                console.log('\n \n SUCCESS!!! \n \n ');
+                question_id = newquestion.get().question_id;
+              }
+            }).then(function(){
+                var results=[];
+                var options = req.body.options;
+                var corrects = req.body.correct;
+
+                for (var i = 0; i < options.length; i++) {
+                    var _corr=0;
+                    if(corrects.includes((i+1).toString())){
+                      _corr=1;
+                    }
+                    var result={
+                      option_id : i+1,
+                      question_id : question_id,
+                      option_text : options[i],
+                      is_correct : _corr,
+                      contains_image : 0,
+                      image_url : ""
+                    };
+                    results.push(result);
+                }
+
+                 models.options.bulkCreate(results, {fields: ['option_id', 'question_id',
+                    'option_text', 'is_correct', 'contains_image', 'image_url']}).then(function(response){
+                      // console.log(response);
+                    }).catch(function(error){
+                      // console.log(error);
+                    });
+
+                // console.log(results);
+                res.redirect('insertQuestion');
             });
 
-        // console.log(results);
-        res.redirect('insertQuestion');
+            
+      }else {
+          message = "This format is not allowed , please upload file with '.png','.gif','.jpg'";
+          console.log(message);
+      }
 
-    });
+
+    }else{
+      var question_id;
+      models.question.create(data).then(function(newquestion,created){
+        if(!newquestion){
+          console.log('\n \n FAILED!!! \n \n ');
+          console.log(data);
+        }
+        if(newquestion){
+          console.log('\n \n SUCCESS!!! \n \n ');
+          question_id = newquestion.get().question_id;
+        }
+      }).then(function(){
+          var results=[];
+          var options = req.body.options;
+          var corrects = req.body.correct;
+
+          for (var i = 0; i < options.length; i++) {
+              var _corr=0;
+              if(corrects.includes((i+1).toString())){
+                _corr=1;
+              }
+              var result={
+                option_id : i+1,
+                question_id : question_id,
+                option_text : options[i],
+                is_correct : _corr,
+                contains_image : 0,
+                image_url : ""
+              };
+              results.push(result);
+          }
+
+           models.options.bulkCreate(results, {fields: ['option_id', 'question_id',
+              'option_text', 'is_correct', 'contains_image', 'image_url']}).then(function(response){
+                // console.log(response);
+              }).catch(function(error){
+                // console.log(error);
+              });
+
+          // console.log(results);
+          res.redirect('insertQuestion');
+      });
+      
+    }
+
+
+    
 });
 
 module.exports = router;

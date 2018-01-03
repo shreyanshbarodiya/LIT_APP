@@ -5,6 +5,7 @@ var session    = require('express-session')
 var bodyParser = require('body-parser')
 var env        = require('dotenv').load()
 var exphbs     = require('express-handlebars')
+var fileUpload = require('express-fileupload');
 
 
 
@@ -18,6 +19,13 @@ app.use(session({ secret: 'keyboard cat',resave: true, saveUninitialized:true}))
 app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions
 
+// For uploading images 
+app.use(fileUpload());
+
+//displaying images
+app.use(express.static('public'));
+//Serves all the request which includes /images in the url from Images folder
+app.use('/images', express.static(__dirname + 'public/images'));
 
  //For Handlebars
 app.set('views', './app/views')

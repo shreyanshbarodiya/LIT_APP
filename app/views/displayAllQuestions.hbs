@@ -14,14 +14,20 @@
 <br/>
 
 {{#each question_list}}
-  {{question_id}}. {{question_text}}
-  <hr/>
+<b>  {{question_id}}. {{question_text}} </b>
+  <br/>
+  {{#if contains_image}}
+  <div align="center"> 
+    <img alt="question picture" src="/images/{{image_url}}" height="200" width="100"> 
+  </div>
+  {{/if}}
+  
+  <br/>
 
   {{#options}}
     {{option_id}}. {{option_text}}
     <br/>
   {{/options}}
-  <hr/>
   <hr/>
 {{/each}}
 
