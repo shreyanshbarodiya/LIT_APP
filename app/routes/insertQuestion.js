@@ -46,68 +46,20 @@ router.post('/insertQuestion', function(req, res){
     if(req.files.uploaded_image){
       var file = req.files.uploaded_image;
       var img_name=file.name;
+                   
+      file.mv('public/images/'+file.name, function(err) {     
+        if (err){
+          console.log('ERROR in images: ' + err);
+          return res.status(500).send(err);
+        }
+
+
+      });
+      data.contains_image=1;
+      data.image_url= img_name;
       
-      if(file.mimetype == "image/jpeg" ||file.mimetype == "image/png"||file.mimetype == "image/gif" ){               
-            file.mv('public/images/'+file.name, function(err) {     
-              if (err){
-                console.log('ERROR in images: ' + err);
-                return res.status(500).send(err);
-              }
+    }
 
-
-            });
-            data.contains_image=1;
-            data.image_url= img_name;
-            var question_id;
-            models.question.create(data).then(function(newquestion,created){
-              if(!newquestion){
-                console.log('\n \n FAILED!!! \n \n ');
-                console.log(data);
-              }
-              if(newquestion){
-                console.log('\n \n SUCCESS!!! \n \n ');
-                question_id = newquestion.get().question_id;
-              }
-            }).then(function(){
-                var results=[];
-                var options = req.body.options;
-                var corrects = req.body.correct;
-
-                for (var i = 0; i < options.length; i++) {
-                    var _corr=0;
-                    if(corrects.includes((i+1).toString())){
-                      _corr=1;
-                    }
-                    var result={
-                      option_id : i+1,
-                      question_id : question_id,
-                      option_text : options[i],
-                      is_correct : _corr,
-                      contains_image : 0,
-                      image_url : ""
-                    };
-                    results.push(result);
-                }
-
-                 models.options.bulkCreate(results, {fields: ['option_id', 'question_id',
-                    'option_text', 'is_correct', 'contains_image', 'image_url']}).then(function(response){
-                      // console.log(response);
-                    }).catch(function(error){
-                      // console.log(error);
-                    });
-
-                // console.log(results);
-                res.redirect('insertQuestion');
-            });
-
-            
-      }else {
-          message = "This format is not allowed , please upload file with '.png','.gif','.jpg'";
-          console.log(message);
-      }
-
-
-    }else{
       var question_id;
       models.question.create(data).then(function(newquestion,created){
         if(!newquestion){
@@ -122,6 +74,9 @@ router.post('/insertQuestion', function(req, res){
           var results=[];
           var options = req.body.options;
           var corrects = req.body.correct;
+          var option_images = [].concat(req.files.option_images);
+          var termsCheck = req.body.termsChkbx;
+
 
           for (var i = 0; i < options.length; i++) {
               var _corr=0;
@@ -136,6 +91,23 @@ router.post('/insertQuestion', function(req, res){
                 contains_image : 0,
                 image_url : ""
               };
+
+              if(termsCheck.includes((i+1).toString())){
+                var idx = termsCheck.indexOf((i+1).toString());
+                var file = option_images[idx];
+                var img_name=file.name;
+                             
+                file.mv('public/images/'+file.name, function(err) {     
+                  if (err){
+                    console.log('ERROR in images: ' + err);
+                    return res.status(500).send(err);
+                  }
+
+                });
+
+                result.contains_image = 1;
+                result.image_url = img_name;
+              }
               results.push(result);
           }
 
@@ -150,7 +122,7 @@ router.post('/insertQuestion', function(req, res){
           res.redirect('insertQuestion');
       });
       
-    }
+    
 
 
     
