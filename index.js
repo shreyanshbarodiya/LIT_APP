@@ -58,16 +58,30 @@ models.sequelize.sync().then(function(){
 });
 
 
+/***
+**** FOR DB-POPULATION
+***/
 
-//FOR INTERNAL USE
-
-//ADD questions portal
-var insertQuestionRoute = require('./app/routes/insertQuestion');
+//Add questions portal
+var insertQuestionRoute = require('./app/routes/db-population/insertQuestion');
 app.use(insertQuestionRoute);
 
 //Display all questions portal
-var displayAllQuestions = require('./app/routes/displayAllQuestions');
+var displayAllQuestions = require('./app/routes/db-population/displayAllQuestions');
 app.use(displayAllQuestions);
+
+/***
+**** PRIVATE ROUTES
+***/
+
+//List all topics
+var getAllTopics = require('./app/routes/private/getAllTopics');
+app.use(getAllTopics);
+
+//Make submission
+var makeSubmission = require('./app/routes/private/makeSubmission');
+app.use(makeSubmission);
+
 
 app.listen(5000, function(err){
 	if(!err)
