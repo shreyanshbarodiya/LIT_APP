@@ -20,5 +20,10 @@
     "database": "",
     "host": "127.0.0.1",
     "dialect": "mysql"
+  },
+  "google": {
+    "clientID": "517332404390-2ehko6ium15uucfchb72e6ih2hkmn03f.apps.googleusercontent.com",
+    "clientSecret": "CSZHCIQR18qy2Svw1rfLtg5u",
+    "callbackURL": "http://localhost:5000/auth/google/redirect"
   }
 }

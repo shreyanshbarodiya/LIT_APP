@@ -1,0 +1,144 @@
+--------------------------------------
+API: /makeSubmission
+parameters: question_id, list of option_ids, timeStamp
+method: POST
+returns: JSON object with attributes:
+	status: "true" for success; "false" for error
+	message: 1(for correct attempt) / 0(for incorrect attempt) for success; error string in case of error
+
+--------------------------------------
+API: /makeBatchSubmission
+parameters: [question_id, list of option_ids, timeStamp]
+method: POST
+returns: JSON object with attributes:
+	status: "true" for success; "false" for error
+	message: error string in case of error
+
+--------------------------------------
+API: /getAllTopics/<subject_name>
+parameters: 
+method: GET
+return: JSON object with attributes:
+	status: "true" for success; "false" for error
+	message: error string in case of error
+	data: list of JSON objects, where each object has two attributes: topic_name and subject_name
+
+--------------------------------------
+API: /getAllSubjects
+parameters: 
+method: GET
+return: JSON object with attributes:
+	status: "true" for success; "false" for error
+	message: error string in case of error
+	data: list of JSON objects, where each object has attribute: subject_name
+
+--------------------------------------
+API: /getNextQuestionForPractice?<query parameters>
+query parameters: subject_name, topic_name
+method: GET
+return: JSON object with attributes:
+	status: "true" for success; "false" for error
+	message: error string in case of error
+	data: JSON object(question model)
+
+--------------------------------------
+API: /getNextBatchForPractice?<query parameters>
+query parameters: subject_name, topic_name, batch_size 
+method: GET
+return: 
+	JSON object with attributes:
+		status: "true" for success; "false" for error
+		message: error string in case of error
+		data: array[JSON object(question model)]
+
+--------------------------------------
+API: /getQuizQuestions?<query parameters>
+query parameters: subject_name, topic_name, batch_size 
+method: GET
+return: 
+	JSON object with attributes:
+		status: "true" for success; "false" for error
+		message: error string in case of error
+		data: array[JSON object(question model)]
+
+--------------------------------------
+API: /getAttemptedQuestions?<query parameters>
+query parameters: subject_name, topic_name
+method: GET
+return: 
+	JSON object with attributes:
+		status: "true" for success; "false" for error
+		message: error string in case of error
+		data: array[JSON object(question model)]
+
+--------------------------------------
+API: /statistics
+parameters: 
+method: GET
+return: 
+	JSON object with attributes:
+		status: "true" for success; "false" for error
+		message: JSON with attributes username, overall_score, overall_rank, today_score, today_rank
+	
+--------------------------------------
+API: /statistics/<subject_name>
+parameters: 
+method: GET
+return: 
+	JSON object with attributes:
+		status: "true" for success; "false" for error
+		message: JSON with attributes username, subject_marks(overall)
+
+--------------------------------------
+API: /getTeachers
+method: GET
+return: 
+	JSON object with attributes:
+		status: "true" for success; "false" for error
+		message: "No teachers" in case no teachers present, error string in case of an error 
+		data: array[JSON with attributes: teacher_id, name, area_pincode]
+
+--------------------------------------
+API: /getTeachers/<pincode>
+method: GET
+return: 
+	JSON object with attributes:
+		status: "true" for success; "false" for error
+		message: "No teachers" in case no teachers present, error string in case of an error 
+		data: array[JSON with attributes: teacher_id, name, area_pincode]
+
+--------------------------------------
+API: /updateProfile
+parameters: name,password,class,school,ph_no,area_pincode,math_teacher,phy_teacher,chem_teacher,bio_teacher
+method: POST
+return:
+	JSON object with attributes:
+		status: "true" for success; "false" for error
+		message: error string in case of an error 
+
+--------------------------------------
+API: /getProfile
+method: GET
+return:
+	JSON object with attributes
+		status: "true" for success; "false" for error
+		message: error string in case of an error 
+		data: details in JSON(user model)
+
+--------------------------------------
+API: /auth/google
+[
+	function: redirects to google oauth2 consent screen, callback to /auth/google/redirect where it is checked that a student with the given email is present or not. 
+	(if present): logs him into the session
+	(if not present): create a new student with the following details: username=google_id, and email,name as present in the google account
+]
+method: GET
+return:
+	JSON object(the logged in user)
+
+--------------------------------------
+API: /auth/logout
+method: GET
+[
+	function: logs user out
+]

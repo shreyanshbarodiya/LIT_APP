@@ -2,12 +2,12 @@
 module.exports = function(sequelize, Sequelize) {
 
 	return sequelize.define('submission', {
-		username: { 
+		email: { 
 			primaryKey: true, 
 			type: Sequelize.STRING,
 			references: {
 				model: 'student',
-				key: 'username'
+				key: 'email'
 			}
 		},
 		question_id: { 

@@ -7,7 +7,7 @@ router.get('/displayAllQuestions', function(req, res){
     var _questions = [];
     var questions = [];
 
-    models.question.findAll().then(function (__questions) {
+    models.question.findAll({order : [['question_id', 'ASC']]}).then(function (__questions) {
       __questions.forEach(function(__question){
         _questions.push(__question.get());
       });
@@ -36,7 +36,38 @@ router.get('/displayAllQuestions', function(req, res){
 
 });
 
+router.get('/displayAllQuestions/:q_id', function(req, res){
+    var _questions = [];
+    var questions = [];
 
+    models.question.findAll({where: {question_id: req.params.q_id}, order : [['question_id', 'ASC']]}).then(function (__questions) {
+      __questions.forEach(function(__question){
+        _questions.push(__question.get());
+      });
+
+    }).then(function(){
+
+      _questions.forEach(function(question){
+        var que=question;
+        que.options=[];
+
+        models.options.findAll({where: {question_id: question.question_id}}).then(function(__options){
+          __options.forEach(function(__option){
+            que.options.push(__option.get());
+          });
+        }).then(function(){
+          
+          questions.push(que);
+        });
+      
+      });
+      
+
+    }).then(function(){
+      res.render('displayAllQuestions', {question_list: questions});
+    });
+
+});
 
 
 

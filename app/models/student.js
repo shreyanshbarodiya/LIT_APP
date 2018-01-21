@@ -2,8 +2,7 @@
 module.exports = function(sequelize, Sequelize) {
 
 	return sequelize.define('student', {
-		username: { 
-			primaryKey: true, 
+		username: {  
 			type: Sequelize.STRING
 		},
 		name: { 
@@ -11,10 +10,10 @@ module.exports = function(sequelize, Sequelize) {
 			notEmpty: true
 		},
 		password : {
-			type: Sequelize.STRING,
-			allowNull: false 
+			type: Sequelize.STRING 
 		}, 
 		email: {
+			primaryKey: true,			
 			type: Sequelize.STRING
 		},
 		class : {
@@ -56,6 +55,15 @@ module.exports = function(sequelize, Sequelize) {
 				model: 'teacher',
 				key: 'teacher_id'
 			}
+		},
+		overall_score: {
+			type: Sequelize.INTEGER
+		},
+		today_score: {
+			type: Sequelize.INTEGER
+		},
+		google_id: {
+			type: Sequelize.STRING
 		}
 
 	}, {

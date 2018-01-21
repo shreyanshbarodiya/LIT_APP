@@ -7,6 +7,7 @@ var env        = require('dotenv').load()
 var exphbs     = require('express-handlebars')
 var fileUpload = require('express-fileupload');
 
+var passportSetup = require('./app/config/passport-setup');
 
 
 //For BodyParser
@@ -19,15 +20,10 @@ app.use(session({ secret: 'keyboard cat',resave: true, saveUninitialized:true}))
 app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions
 
-// For uploading images 
 app.use(fileUpload());
-
-//displaying images
 app.use(express.static('public'));
-//Serves all the request which includes /images in the url from Images folder
 app.use('/images', express.static(__dirname + 'public/images'));
 
- //For Handlebars
 app.set('views', './app/views')
 app.engine('hbs', exphbs({extname: '.hbs'}));
 app.set('view engine', '.hbs');
@@ -37,17 +33,25 @@ app.get('/', function(req, res){
   res.send('Welcome to Passport with Sequelize');
 });
 
-
+app.get('/dashboard', function(req,res){
+    if (req.isAuthenticated()){
+		res.render('dashboard', {firstname: req.user.name, lastname: req.user.school}); 
+    }
+    else{
+    	res.redirect('/auth/google');
+    }
+	
+});
 
 //Models
 var models = require("./app/models");
 
-//Routes
-var authRoute = require('./app/routes/auth.js')(app,passport);
+/*var authRoute = require('./app/routes/auth.js')(app,passport);
 
+require('./app/config/passport/passport.js')(passport,models.student);*/
 
-//load passport strategies
-require('./app/config/passport/passport.js')(passport,models.student);
+var authRoutes = require('./app/routes/auth-routes');
+app.use('/auth', authRoutes);
 
 
 //Sync Database
@@ -70,17 +74,41 @@ app.use(insertQuestionRoute);
 var displayAllQuestions = require('./app/routes/db-population/displayAllQuestions');
 app.use(displayAllQuestions);
 
+//Display latest questions portal
+var displayLatestQuestions = require('./app/routes/db-population/displayLatestQuestions');
+app.use(displayLatestQuestions);
+
 /***
 **** PRIVATE ROUTES
 ***/
 
 //List all topics
-var getAllTopics = require('./app/routes/private/getAllTopics');
-app.use(getAllTopics);
+var getAllTopicsAndSubjects = require('./app/routes/private/getAllTopicsAndSubjects');
+app.use(getAllTopicsAndSubjects);
+
+//List all teachers
+var getTeachers = require('./app/routes/private/getTeachers');
+app.use(getTeachers);
 
 //Make submission
 var makeSubmission = require('./app/routes/private/makeSubmission');
 app.use(makeSubmission);
+
+//get next question for practice
+var getNextQuestionForPractice = require('./app/routes/private/getNextQuestionForPractice');
+app.use(getNextQuestionForPractice);
+
+//get N questions for quiz
+var getQuizQuestions = require('./app/routes/private/getQuizQuestions');
+app.use(getQuizQuestions);
+
+var updateProfile = require('./app/routes/private/updateProfile');
+app.use(updateProfile);
+/***
+**** STATISTICS
+***/
+var statistics = require('./app/routes/private/statistics');
+app.use(statistics);
 
 
 app.listen(5000, function(err){

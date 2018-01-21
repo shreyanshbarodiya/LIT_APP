@@ -2,6 +2,22 @@ var express = require('express');
 var router = express.Router();
 
 var models = require('../../models');
+
+router.get('/insertQuestion/:subject_name', function(req, res){
+    var subjects = [];
+    var topics = [];
+
+    subjects.push( {subject_name: req.params.subject_name});
+
+    models.topic.findAll({where: {subject_name: req.params.subject_name}}).then(function (_topics) {
+      _topics.forEach(function(topic){
+        topics.push(topic.get());
+      })})
+      .then(function(){
+      res.render('insertQuestion', {subject_list: subjects, topic_list: topics});
+    });
+});
+
 router.get('/insertQuestion', function(req, res){
     var subjects = [];
     var topics = [];
@@ -47,7 +63,7 @@ router.post('/insertQuestion', function(req, res){
       var file = req.files.uploaded_image;
       var img_name=file.name;
                    
-      file.mv('public/images/'+file.name, function(err) {     
+      file.mv('public/images/questions/'+file.name, function(err) {     
         if (err){
           console.log('ERROR in images: ' + err);
           return res.status(500).send(err);
@@ -92,12 +108,12 @@ router.post('/insertQuestion', function(req, res){
                 image_url : ""
               };
 
-              if(termsCheck.includes((i+1).toString())){
+              if(termsCheck != undefined && termsCheck.includes((i+1).toString())){
                 var idx = termsCheck.indexOf((i+1).toString());
                 var file = option_images[idx];
                 var img_name=file.name;
                              
-                file.mv('public/images/'+file.name, function(err) {     
+                file.mv('public/images/options/'+file.name, function(err) {     
                   if (err){
                     console.log('ERROR in images: ' + err);
                     return res.status(500).send(err);
@@ -119,7 +135,8 @@ router.post('/insertQuestion', function(req, res){
               });
 
           // console.log(results);
-          res.redirect('insertQuestion');
+          //redirecting to the same subject that was inserted
+          res.redirect('insertQuestion/'+data.subject_name);
       });
       
     
@@ -127,6 +144,8 @@ router.post('/insertQuestion', function(req, res){
 
     
 });
+
+
 
 module.exports = router;
 

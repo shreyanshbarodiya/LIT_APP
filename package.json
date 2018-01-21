@@ -29,6 +29,7 @@
     "mysql": "^2.15.0",
     "now": "^9.0.1",
     "passport": "^0.3.2",
+    "passport-google-oauth20": "^1.0.0",
     "passport-local": "^1.0.0",
     "sequelize": "^3.31.1"
   }

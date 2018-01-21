@@ -14,7 +14,7 @@ function change_button(checkbx,button_id) {
 }
 </script>
 <body>
-<form id="insertQuestion" name="insertQuestion" method="post" action="insertQuestion" enctype="multipart/form-data">
+<form id="insertQuestion" name="insertQuestion" method="post" action="../insertQuestion" enctype="multipart/form-data">
 
 
   Question: <br/>
@@ -26,7 +26,7 @@ function change_button(checkbx,button_id) {
   <label for="subject_name">Subject: </label>
   <select name="subject_name">
     {{#each subject_list}}
-      <option value={{subject_name}}> {{subject_name}}</option>
+      <option value="{{subject_name}}"> {{subject_name}}</option>
     {{/each}}
   </select>
 
@@ -35,13 +35,13 @@ function change_button(checkbx,button_id) {
   <label for="topic_name">Topic: </label>
   <select name="topic_name">
       {{#each topic_list}}
-        <option value={{topic_name}}> {{topic_name}}</option>
+        <option value="{{topic_name}}"> {{topic_name}}</option>
       {{/each}}
   </select>
   <br/>
 
   <label for="question_marks">Question Marks: </label>
-  <input name="question_marks" type="text"/>
+  <input name="question_marks" type="text" value="4"/>
   <br/>
 
   <div>
