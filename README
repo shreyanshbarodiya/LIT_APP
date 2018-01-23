@@ -60,15 +60,4 @@ To insert questions and options in the database:
 ------------------------------------------------------------------
 - Existing Routes
 ------------------------------------------------------------------
-1. /displayAllQuestions 
-2. /insertQuestion
-
-Following are for testing purposes:
-3. /signin
-4. /signup
-5. /logout
-6. /dashboard
-
-Following are private routes in dev phase for backend:
-7. /getAllTopics/<Subject Name>		example: getAllTopics/Physics
-8. /makeSubmission
+Please check backend-APIs file.
