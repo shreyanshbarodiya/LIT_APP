@@ -9,7 +9,7 @@ router.get('/getNextQuestionForPractice', function(req, res){
     var retString={};   
 
     var received =
-      {   email: req.user.email,
+      {   email: req.query.email,
           subject_name: req.query.subject_name,
           topic_name: req.query.topic_name
       };
@@ -51,7 +51,7 @@ router.get('/getNextBatchForPractice', function(req, res){
     var retString={};   
 
     var received =
-      {   email: req.user.email,
+      {   email: req.query.email,
           subject_name: req.query.subject_name,
           topic_name: req.query.topic_name,
           batch_size: req.query.batch_size
@@ -100,7 +100,7 @@ router.get('/getNextBatchForPractice', function(req, res){
 router.get('/getAttemptedQuestions', function(req, res){ 
 
     var received =
-      {   email: req.user.email,
+      {   email: req.query.email,
           subject_name: req.query.subject_name,
           topic_name: req.query.topic_name
       };
